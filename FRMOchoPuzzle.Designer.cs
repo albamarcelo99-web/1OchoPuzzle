@@ -42,7 +42,6 @@
             this.TMRReloj = new System.Windows.Forms.Timer(this.components);
             this.LBLContador = new System.Windows.Forms.Label();
             this.BTNGenerarHijos = new System.Windows.Forms.Button();
-            this.LBLContador2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // LBL00
@@ -175,7 +174,7 @@
             // 
             this.BTNDesordenar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTNDesordenar.Location = new System.Drawing.Point(315, 10);
-            this.BTNDesordenar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BTNDesordenar.Margin = new System.Windows.Forms.Padding(2);
             this.BTNDesordenar.Name = "BTNDesordenar";
             this.BTNDesordenar.Size = new System.Drawing.Size(142, 41);
             this.BTNDesordenar.TabIndex = 9;
@@ -203,7 +202,7 @@
             // 
             this.BTNGenerarHijos.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTNGenerarHijos.Location = new System.Drawing.Point(315, 120);
-            this.BTNGenerarHijos.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BTNGenerarHijos.Margin = new System.Windows.Forms.Padding(2);
             this.BTNGenerarHijos.Name = "BTNGenerarHijos";
             this.BTNGenerarHijos.Size = new System.Drawing.Size(142, 41);
             this.BTNGenerarHijos.TabIndex = 11;
@@ -211,24 +210,11 @@
             this.BTNGenerarHijos.UseVisualStyleBackColor = true;
             this.BTNGenerarHijos.Click += new System.EventHandler(this.BTNGenerarHijos_Click);
             // 
-            // LBLContador2
-            // 
-            this.LBLContador2.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.LBLContador2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.LBLContador2.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LBLContador2.Location = new System.Drawing.Point(314, 166);
-            this.LBLContador2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.LBLContador2.Name = "LBLContador2";
-            this.LBLContador2.Size = new System.Drawing.Size(143, 60);
-            this.LBLContador2.TabIndex = 12;
-            this.LBLContador2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // FRMOchoPuzzle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(462, 348);
-            this.Controls.Add(this.LBLContador2);
             this.Controls.Add(this.BTNGenerarHijos);
             this.Controls.Add(this.LBLContador);
             this.Controls.Add(this.BTNDesordenar);
@@ -242,7 +228,7 @@
             this.Controls.Add(this.LBL01);
             this.Controls.Add(this.LBL00);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FRMOchoPuzzle";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "8 Puzzle";
@@ -265,6 +251,5 @@
         private System.Windows.Forms.Timer TMRReloj;
         private System.Windows.Forms.Label LBLContador;
         private System.Windows.Forms.Button BTNGenerarHijos;
-        private System.Windows.Forms.Label LBLContador2;
     }
 }
