@@ -111,6 +111,24 @@ namespace OchoPuzzle
 
             return Respuesta;
         }
+        public bool EsFinal()
+        {
+            bool res = false;
+
+            return res;
+        }
+
+        // Comprueba si dos estados tienen el mismo tablero
+        public bool EsIgual(CLEstado otro)
+        {
+            if (otro == null) return false;
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 3; j++)
+                    if (this._tablero[i, j] != otro._tablero[i, j])
+                        return false;
+            return true;
+        }
         #endregion
+
     }
 }
