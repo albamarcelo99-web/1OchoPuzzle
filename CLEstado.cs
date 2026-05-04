@@ -9,6 +9,7 @@ namespace OchoPuzzle
         #region Campos
         private int[,] _tablero;
         private int _nivel;
+        private CLEstado _padre;
         #endregion
 
         #region Propiedades
@@ -22,6 +23,11 @@ namespace OchoPuzzle
             get => _nivel;
             set => _nivel = value;
         }
+        public CLEstado padre
+        {
+            get => _padre;
+            set => _padre = value;
+        }
         #endregion
 
         #region Constructor
@@ -32,6 +38,7 @@ namespace OchoPuzzle
                 for (int j = 0; j < 3; j++)
                     this._tablero[i, j] = 0;
             this._nivel = 0;
+            this._padre = null;
         }
         public CLEstado(int p00, int p01, int p02,
                         int p10, int p11, int p12,
@@ -50,9 +57,10 @@ namespace OchoPuzzle
             this._tablero[2, 1] = p21;
             this._tablero[2, 2] = p22;
             this._nivel = 0;
+            this._padre = null;
         }
 
-    
+
         public CLEstado(int[,] tablero)
         {
             this._tablero = new int[3, 3];
@@ -60,6 +68,7 @@ namespace OchoPuzzle
                 for (int j = 0; j < 3; j++)
                     this._tablero[i, j] = tablero[i, j];
             this._nivel = 0;
+            this._padre = null;
         }
 
 
@@ -69,44 +78,335 @@ namespace OchoPuzzle
         #region Métodos
         public List<CLEstado> GenerarHijos()
         {
-            var Respuesta = new List<CLEstado>();
-
-            int zi = -1, zj = -1;
+            List<CLEstado> Respuesta = new List<CLEstado>();
+            String pos0 = "";
+            int[,] aux = new int[3, 3];
             for (int i = 0; i < 3; i++)
-            {
                 for (int j = 0; j < 3; j++)
-                {
                     if (this._tablero[i, j] == 0)
                     {
-                        zi = i; zj = j; break;
+                        pos0 = i.ToString() + j.ToString();
                     }
-                }
-                if (zi != -1) break;
-            }
-
-            if (zi == -1) return Respuesta;
-
-            int[,] moves = new int[,] { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
-
-            for (int m = 0; m < 4; m++)
+            CLEstado A = new CLEstado();
+            switch (pos0)
             {
-                int ni = zi + moves[m, 0];
-                int nj = zj + moves[m, 1];
-                if (ni >= 0 && ni < 3 && nj >= 0 && nj < 3)
-                {
-                    int[,] copy = new int[3, 3];
-                    for (int i = 0; i < 3; i++)
-                        for (int j = 0; j < 3; j++)
-                            copy[i, j] = this._tablero[i, j];
+                case "00":
+                    A = new CLEstado(this._tablero[0, 1],
+                                             this._tablero[0, 0],
+                                             this._tablero[0, 2],
+                                             this._tablero[1, 0],
+                                             this._tablero[1, 1],
+                                             this._tablero[1, 2],
+                                             this._tablero[2, 0],
+                                             this._tablero[2, 1],
+                                             this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    A = new CLEstado(this._tablero[1, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[0, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    break;
+                case "01":
+                    A = new CLEstado(this._tablero[0, 1],
+                                         this._tablero[0, 0],
+                                         this._tablero[0, 2],
+                                         this._tablero[1, 0],
+                                         this._tablero[1, 1],
+                                         this._tablero[1, 2],
+                                         this._tablero[2, 0],
+                                         this._tablero[2, 1],
+                                         this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
 
-                    
-                    copy[zi, zj] = copy[ni, nj];
-                    copy[ni, nj] = 0;
+                    A = new CLEstado(this._tablero[0, 0],
+                                         this._tablero[1, 1],
+                                         this._tablero[0, 2],
+                                         this._tablero[1, 0],
+                                         this._tablero[0, 1],
+                                         this._tablero[1, 2],
+                                         this._tablero[2, 0],
+                                         this._tablero[2, 1],
+                                         this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
 
-                    var hijo = new CLEstado(copy);
-                    hijo.nivel = this._nivel + 1;
-                    Respuesta.Add(hijo);
-                }
+                    A = new CLEstado(this._tablero[0, 0],
+                                         this._tablero[0, 2],
+                                         this._tablero[0, 1],
+                                         this._tablero[1, 0],
+                                         this._tablero[1, 1],
+                                         this._tablero[1, 2],
+                                         this._tablero[2, 0],
+                                         this._tablero[2, 1],
+                                         this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    break;
+                case "02":
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 2],
+                                     this._tablero[0, 1],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    break;
+                case "10":
+                    A = new CLEstado(this._tablero[0, 1],
+                                     this._tablero[0, 0],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 1],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    break;
+                case "11":
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 1],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 2],
+                                     this._tablero[1, 1],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[2, 2]);
+
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    break;
+                case "12":
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 2],
+                                     this._tablero[1, 1],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[2, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[1, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    break;
+                case "20":
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    break;
+                case "21":
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 1],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[2, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 2],
+                                     this._tablero[2, 1]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    break;
+                case "22":
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[2, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 1],
+                                     this._tablero[1, 2]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    A = new CLEstado(this._tablero[0, 0],
+                                     this._tablero[0, 1],
+                                     this._tablero[0, 2],
+                                     this._tablero[1, 0],
+                                     this._tablero[1, 1],
+                                     this._tablero[1, 2],
+                                     this._tablero[2, 0],
+                                     this._tablero[2, 2],
+                                     this._tablero[2, 1]);
+                    A.nivel = this.nivel + 1;
+                    A.padre = this;
+                    Respuesta.Add(A);
+                    break;
             }
 
             return Respuesta;
@@ -114,18 +414,33 @@ namespace OchoPuzzle
         public bool EsFinal()
         {
             bool res = false;
-
+            if (_tablero[0, 0] == 1 &&
+                _tablero[0, 1] == 2 &&
+                _tablero[0, 2] == 3 &&
+                _tablero[1, 0] == 4 &&
+                _tablero[1, 1] == 5 &&
+                _tablero[1, 2] == 6 &&
+                _tablero[2, 0] == 7 &&
+                _tablero[2, 1] == 8 &&
+                _tablero[2, 2] == 0)
+            {
+                res = true;
+            }
             return res;
         }
 
-        // Comprueba si dos estados tienen el mismo tablero
-        public bool EsIgual(CLEstado otro)
+        public bool EsIgual(CLEstado a)
         {
-            if (otro == null) return false;
             for (int i = 0; i < 3; i++)
+            {
                 for (int j = 0; j < 3; j++)
-                    if (this._tablero[i, j] != otro._tablero[i, j])
+                {
+                    if (a.tablero[i, j] != this.tablero[i, j])
+                    {
                         return false;
+                    }
+                }
+            }
             return true;
         }
         #endregion

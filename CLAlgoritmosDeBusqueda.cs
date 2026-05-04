@@ -29,7 +29,15 @@ namespace OchoPuzzle
                     Abiertos.Add(a);
                 Actual = Abiertos[0];
             }
-
+            if (Actual.EsFinal())
+            {
+                Solucion.Add(Actual);
+                while (Actual.padre != null)
+                {
+                    Solucion.Add(Actual.padre);
+                    Actual = Actual.padre;
+                }
+            }
             return Solucion;
         }
 

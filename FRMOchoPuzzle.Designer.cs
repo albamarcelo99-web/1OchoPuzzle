@@ -43,6 +43,9 @@
             this.LBLContador = new System.Windows.Forms.Label();
             this.BTNGenerarHijos = new System.Windows.Forms.Button();
             this.BTNEsFinal = new System.Windows.Forms.Button();
+            this.BTNAnchuraPrioritaria = new System.Windows.Forms.Button();
+            this.TMRReloj1 = new System.Windows.Forms.Timer(this.components);
+            this.LBLElementos = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // LBL00
@@ -175,9 +178,9 @@
             // 
             this.BTNDesordenar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTNDesordenar.Location = new System.Drawing.Point(315, 10);
-            this.BTNDesordenar.Margin = new System.Windows.Forms.Padding(2);
+            this.BTNDesordenar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.BTNDesordenar.Name = "BTNDesordenar";
-            this.BTNDesordenar.Size = new System.Drawing.Size(142, 41);
+            this.BTNDesordenar.Size = new System.Drawing.Size(218, 41);
             this.BTNDesordenar.TabIndex = 9;
             this.BTNDesordenar.Text = "Desordenar";
             this.BTNDesordenar.UseVisualStyleBackColor = true;
@@ -195,7 +198,7 @@
             this.LBLContador.Location = new System.Drawing.Point(315, 54);
             this.LBLContador.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.LBLContador.Name = "LBLContador";
-            this.LBLContador.Size = new System.Drawing.Size(143, 60);
+            this.LBLContador.Size = new System.Drawing.Size(219, 60);
             this.LBLContador.TabIndex = 10;
             this.LBLContador.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -203,9 +206,9 @@
             // 
             this.BTNGenerarHijos.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BTNGenerarHijos.Location = new System.Drawing.Point(315, 120);
-            this.BTNGenerarHijos.Margin = new System.Windows.Forms.Padding(2);
+            this.BTNGenerarHijos.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.BTNGenerarHijos.Name = "BTNGenerarHijos";
-            this.BTNGenerarHijos.Size = new System.Drawing.Size(142, 41);
+            this.BTNGenerarHijos.Size = new System.Drawing.Size(218, 53);
             this.BTNGenerarHijos.TabIndex = 11;
             this.BTNGenerarHijos.Text = "Generar Hijos";
             this.BTNGenerarHijos.UseVisualStyleBackColor = true;
@@ -214,19 +217,47 @@
             // BTNEsFinal
             // 
             this.BTNEsFinal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BTNEsFinal.Location = new System.Drawing.Point(420, 205);
+            this.BTNEsFinal.Location = new System.Drawing.Point(315, 177);
+            this.BTNEsFinal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.BTNEsFinal.Name = "BTNEsFinal";
-            this.BTNEsFinal.Size = new System.Drawing.Size(190, 51);
+            this.BTNEsFinal.Size = new System.Drawing.Size(218, 49);
             this.BTNEsFinal.TabIndex = 12;
             this.BTNEsFinal.Text = "Es Final";
             this.BTNEsFinal.UseVisualStyleBackColor = true;
             this.BTNEsFinal.Click += new System.EventHandler(this.BTNEsFinal_Click);
             // 
+            // BTNAnchuraPrioritaria
+            // 
+            this.BTNAnchuraPrioritaria.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BTNAnchuraPrioritaria.Location = new System.Drawing.Point(316, 234);
+            this.BTNAnchuraPrioritaria.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BTNAnchuraPrioritaria.Name = "BTNAnchuraPrioritaria";
+            this.BTNAnchuraPrioritaria.Size = new System.Drawing.Size(218, 41);
+            this.BTNAnchuraPrioritaria.TabIndex = 13;
+            this.BTNAnchuraPrioritaria.Text = "Anchura Prioritaria";
+            this.BTNAnchuraPrioritaria.UseVisualStyleBackColor = true;
+            this.BTNAnchuraPrioritaria.Click += new System.EventHandler(this.BTNAnchuraPrioritaria_Click);
+            // 
+            // LBLElementos
+            // 
+            this.LBLElementos.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.LBLElementos.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.LBLElementos.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LBLElementos.Location = new System.Drawing.Point(315, 279);
+            this.LBLElementos.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.LBLElementos.Name = "LBLElementos";
+            this.LBLElementos.Size = new System.Drawing.Size(219, 60);
+            this.LBLElementos.TabIndex = 14;
+            this.LBLElementos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // FRMOchoPuzzle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(462, 348);
+            this.ClientSize = new System.Drawing.Size(542, 348);
+            this.Controls.Add(this.LBLElementos);
+            this.Controls.Add(this.BTNAnchuraPrioritaria);
+            this.Controls.Add(this.BTNEsFinal);
             this.Controls.Add(this.BTNGenerarHijos);
             this.Controls.Add(this.LBLContador);
             this.Controls.Add(this.BTNDesordenar);
@@ -239,9 +270,8 @@
             this.Controls.Add(this.LBL02);
             this.Controls.Add(this.LBL01);
             this.Controls.Add(this.LBL00);
-            this.Controls.Add(this.BTNEsFinal);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "FRMOchoPuzzle";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "8 Puzzle";
@@ -265,5 +295,8 @@
         private System.Windows.Forms.Label LBLContador;
         private System.Windows.Forms.Button BTNGenerarHijos;
         private System.Windows.Forms.Button BTNEsFinal;
+        private System.Windows.Forms.Button BTNAnchuraPrioritaria;
+        private System.Windows.Forms.Timer TMRReloj1;
+        private System.Windows.Forms.Label LBLElementos;
     }
 }
