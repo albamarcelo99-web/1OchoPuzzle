@@ -15,9 +15,10 @@ namespace OchoPuzzle
         private int contador = 0;
         private String pos0;
         private String[,] posiciones;
-        // Campos para animación de la solución por Anchura Prioritaria
-        private List<CLEstado> _resultadoAnchura;
-        private int _indiceAnchura = 0;
+        private int contadorAnchura = 0;
+        private int contadorProfundidad = 0;
+        private List<CLEstado> Resultado = new List<CLEstado>();
+        bool bandera = false;
         public FRMOchoPuzzle()
         {
             InitializeComponent();
@@ -432,6 +433,7 @@ namespace OchoPuzzle
             A.Hijos = Hijos;
             A.ShowDialog();
         }
+
         private void BTNEsFinal_Click(object sender, EventArgs e)
         {
             CLEstado Inicial = new CLEstado(Convert.ToInt32(LBL00.Text),
@@ -453,6 +455,7 @@ namespace OchoPuzzle
                 MessageBox.Show("NO ES el estado FINAL");
             }
         }
+
         private void BTNAnchuraPrioritaria_Click(object sender, EventArgs e)
         {
             CLEstado Inicial = new CLEstado(Convert.ToInt32(LBL00.Text),
@@ -465,107 +468,123 @@ namespace OchoPuzzle
                                             Convert.ToInt32(LBL21.Text),
                                             Convert.ToInt32(LBL22.Text)
                                             );
-            List<CLEstado> Resultado = CLAlgoritmosDeBusqueda.AnchuraPrioritaria(Inicial);
-            if (Resultado != null && Resultado.Count > 0)
+            Resultado = new List<CLEstado>();
+            Resultado = CLAlgoritmosDeBusqueda.AnchuraPrioritaria(Inicial);
+            if (Resultado.Count > 0)
             {
-                // Guardar la secuencia y empezar la animación
-                _resultadoAnchura = Resultado;
-                _indiceAnchura = 0;
-
-                // limpiar el listado visual de pasos si existe (LBLElementos es un Label)
-                if (LBLElementos != null)
-                    LBLElementos.Text = string.Empty;
-
-                MessageBox.Show("Solucion Encontrada");
-                // iniciar el timer que reproducirá la secuencia paso a paso
-                if (TMRReloj1 != null)
-                    TMRReloj1.Enabled = true;
+                MessageBox.Show("Solucion Encontrada en el nivel " + (Resultado.Count - 1).ToString());
+                //Resolver graficamente                
+                TMRRelojAnchuraPrioritaria.Enabled = true;
             }
             else
+            { MessageBox.Show("Solucion No Encontrada"); }
+        }
+        private void TMRRelojAnchuraPrioritaria_Tick(object sender, EventArgs e)
+        {
+
+            if ((contadorAnchura < Resultado.Count) && (!bandera))
             {
-                MessageBox.Show("Solucion No Encontrada");
+                EstadoATablero(Resultado[Resultado.Count - contadorAnchura - 1]);
+                contadorAnchura++;
+            }
+            if ((contadorAnchura == Resultado.Count) && (!bandera))
+            {
+                bandera = true;
+                contadorAnchura--;
+                TMRRelojAnchuraPrioritaria.Enabled = false;
+                if (MessageBox.Show("Listo") == DialogResult.OK)
+                {
+                    TMRRelojAnchuraPrioritaria.Enabled = true;
+                }
+
+            }
+            if ((contadorAnchura >= 0) && (bandera))
+            {
+                EstadoATablero(Resultado[Resultado.Count - contadorAnchura - 1]);
+                contadorAnchura--;
+            }
+            if ((contadorAnchura == -1) && (bandera))
+            {
+                TMRRelojAnchuraPrioritaria.Enabled = false;
+                MessageBox.Show("Otra vez desordenado");
             }
         }
 
-        private void TMRReloj1_Tick(object sender, EventArgs e)
+        private void EstadoATablero(CLEstado Estado)
         {
-            // Protección básica y uso directo de la matriz del CLEstado
-            if (_resultadoAnchura == null || _resultadoAnchura.Count == 0)
-            {
-                if (TMRReloj1 != null)
-                    TMRReloj1.Enabled = false;
-                return;
-            }
-
-            if (_indiceAnchura < 0 || _indiceAnchura >= _resultadoAnchura.Count)
-            {
-                if (TMRReloj1 != null)
-                    TMRReloj1.Enabled = false;
-                return;
-            }
-
-            CLEstado estado = _resultadoAnchura[_indiceAnchura];
-            if (estado == null || estado.tablero == null)
-            {
-                if (TMRReloj1 != null)
-                    TMRReloj1.Enabled = false;
-                return;
-            }
-
-            int[,] tablero = estado.tablero;
-            if (tablero.GetLength(0) < 3 || tablero.GetLength(1) < 3)
-            {
-                if (TMRReloj1 != null)
-                    TMRReloj1.Enabled = false;
-                return;
-            }
-
-            // Actualizar labels con la matriz
-            LBL00.Text = tablero[0, 0].ToString();
-            LBL01.Text = tablero[0, 1].ToString();
-            LBL02.Text = tablero[0, 2].ToString();
-            LBL10.Text = tablero[1, 0].ToString();
-            LBL11.Text = tablero[1, 1].ToString();
-            LBL12.Text = tablero[1, 2].ToString();
-            LBL20.Text = tablero[2, 0].ToString();
-            LBL21.Text = tablero[2, 1].ToString();
-            LBL22.Text = tablero[2, 2].ToString();
-
-            // Registrar paso en LBLElementos (Label) — concatenar en Text con saltos de línea
-            if (LBLElementos != null)
-            {
-                var repr = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8}",
-                    tablero[0, 0], tablero[0, 1], tablero[0, 2],
-                    tablero[1, 0], tablero[1, 1], tablero[1, 2],
-                    tablero[2, 0], tablero[2, 1], tablero[2, 2]);
-                if (string.IsNullOrEmpty(LBLElementos.Text))
-                {
-                    LBLElementos.Text = repr;
-                }
-                else
-                {
-                    LBLElementos.Text += Environment.NewLine + repr;
-                }
-            }
-
-            // Avanzar índice o terminar
-            if (_indiceAnchura >= _resultadoAnchura.Count - 1)
-            {
-                if (TMRReloj1 != null)
-                    TMRReloj1.Enabled = false;
-                MessageBox.Show("La solucion a sido encontrada");
-                _resultadoAnchura = null;
-                _indiceAnchura = 0;
-            }
-            else
-            {
-                _indiceAnchura++;
-            }
+            LBL00.Text = Estado.tablero[0, 0].ToString();
+            LBL01.Text = Estado.tablero[0, 1].ToString();
+            LBL02.Text = Estado.tablero[0, 2].ToString();
+            LBL10.Text = Estado.tablero[1, 0].ToString();
+            LBL11.Text = Estado.tablero[1, 1].ToString();
+            LBL12.Text = Estado.tablero[1, 2].ToString();
+            LBL20.Text = Estado.tablero[2, 0].ToString();
+            LBL21.Text = Estado.tablero[2, 1].ToString();
+            LBL22.Text = Estado.tablero[2, 2].ToString();
         }
 
-        private void BTNOrdenar_Click(object sender, EventArgs e)
+        private void BTNProfundidadLimitada_Click(object sender, EventArgs e)
         {
-            TMRReloj1.Enabled = true;
+            CLEstado Inicial = new CLEstado(Convert.ToInt32(LBL00.Text),
+                                            Convert.ToInt32(LBL01.Text),
+                                            Convert.ToInt32(LBL02.Text),
+                                            Convert.ToInt32(LBL10.Text),
+                                            Convert.ToInt32(LBL11.Text),
+                                            Convert.ToInt32(LBL12.Text),
+                                            Convert.ToInt32(LBL20.Text),
+                                            Convert.ToInt32(LBL21.Text),
+                                            Convert.ToInt32(LBL22.Text)
+                                            );
+            Resultado = new List<CLEstado>();
+            
+            int limite = 0;
+            var nud = this.Controls.Find("NUDContador", true).FirstOrDefault() as System.Windows.Forms.NumericUpDown;
+            if (nud != null)
+            {
+                limite = (int)nud.Value;
+                if (limite < 1) limite = 1;
+            }
+            Resultado = CLAlgoritmosDeBusqueda.ProfundidadLimitada(Inicial, limite);
+            if (Resultado.Count > 0)
+            {
+                MessageBox.Show("Solucion Encontrada en el nivel " + (Resultado.Count - 1).ToString() + " [ Profundidad Limitada usada: " + limite + "]");
+                //Resolver graficamente                
+                TMRRelojProfundidadLimitada.Enabled = true;
+            }
+            else
+            { MessageBox.Show("Solucion No Encontrada"); }
+        }
+
+        private void TMRRelojProfundidadLimitada_Tick_1(object sender, EventArgs e)
+        {
+            if ((contadorProfundidad < Resultado.Count) && (!bandera))
+            {
+                EstadoATablero(Resultado[Resultado.Count - contadorProfundidad - 1]);
+                contadorProfundidad++;
+            }
+            if ((contadorProfundidad == Resultado.Count) && (!bandera))
+            {
+                bandera = true;
+                contadorProfundidad--;
+                    // pausar antes de invertir
+                TMRRelojProfundidadLimitada.Enabled = false;
+                if (MessageBox.Show("Listo") == DialogResult.OK)
+                {
+                    TMRRelojProfundidadLimitada.Enabled = true;
+                }
+
+            }
+            if ((contadorProfundidad >= 0) && (bandera))
+            {
+                EstadoATablero(Resultado[Resultado.Count - contadorProfundidad - 1]);
+                contadorProfundidad--;
+            }
+            if ((contadorProfundidad == -1) && (bandera))
+            {
+                TMRRelojProfundidadLimitada.Enabled = false;
+                MessageBox.Show("Otra vez desordenado");
+            }
         }
     }
 }
+    

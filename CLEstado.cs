@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace OchoPuzzle
 {
- 
+
     public class CLEstado
     {
         #region Campos
@@ -49,7 +49,11 @@ namespace OchoPuzzle
             this._tablero[0, 0] = p00;
             this._tablero[1, 0] = p10;
             this._tablero[2, 0] = p20;
+            this._tablero[0, 1] = p01;
+            this._tablero[1, 1] = p11;
             this._tablero[2, 1] = p21;
+            this._tablero[0, 2] = p02;
+            this._tablero[1, 2] = p12;
             this._tablero[2, 2] = p22;
             this._nivel = 0;
             this._padre = null;
@@ -394,6 +398,7 @@ namespace OchoPuzzle
             }
             return Respuesta;
         }
+
         public bool EsFinal()
         {
             bool res = false;
@@ -426,7 +431,7 @@ namespace OchoPuzzle
             }
             return true;
         }
-        #endregion
 
+        #endregion
     }
 }
