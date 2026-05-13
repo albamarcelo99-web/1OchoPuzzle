@@ -44,8 +44,6 @@
             this.BTNGenerarHijos = new System.Windows.Forms.Button();
             this.BTNEsFinal = new System.Windows.Forms.Button();
             this.BTNAnchuraPrioritaria = new System.Windows.Forms.Button();
-            this.TMRReloj1 = new System.Windows.Forms.Timer(this.components);
-            this.LBLElementos = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // LBL00
@@ -238,18 +236,6 @@
             this.BTNAnchuraPrioritaria.UseVisualStyleBackColor = true;
             this.BTNAnchuraPrioritaria.Click += new System.EventHandler(this.BTNAnchuraPrioritaria_Click);
             // 
-            // LBLElementos
-            // 
-            this.LBLElementos.BackColor = System.Drawing.Color.LightSkyBlue;
-            this.LBLElementos.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.LBLElementos.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LBLElementos.Location = new System.Drawing.Point(315, 279);
-            this.LBLElementos.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.LBLElementos.Name = "LBLElementos";
-            this.LBLElementos.Size = new System.Drawing.Size(219, 60);
-            this.LBLElementos.TabIndex = 14;
-            this.LBLElementos.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // FRMOchoPuzzle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -271,7 +257,6 @@
             this.Controls.Add(this.LBL01);
             this.Controls.Add(this.LBL00);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "FRMOchoPuzzle";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "8 Puzzle";
@@ -296,7 +281,5 @@
         private System.Windows.Forms.Button BTNGenerarHijos;
         private System.Windows.Forms.Button BTNEsFinal;
         private System.Windows.Forms.Button BTNAnchuraPrioritaria;
-        private System.Windows.Forms.Timer TMRReloj1;
-        private System.Windows.Forms.Label LBLElementos;
     }
 }

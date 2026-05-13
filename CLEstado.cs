@@ -46,27 +46,11 @@ namespace OchoPuzzle
                         )
         {
             this._tablero = new int[3, 3];
-            
             this._tablero[0, 0] = p00;
-            this._tablero[0, 1] = p01;
-            this._tablero[0, 2] = p02;
             this._tablero[1, 0] = p10;
-            this._tablero[1, 1] = p11;
-            this._tablero[1, 2] = p12;
             this._tablero[2, 0] = p20;
             this._tablero[2, 1] = p21;
             this._tablero[2, 2] = p22;
-            this._nivel = 0;
-            this._padre = null;
-        }
-
-
-        public CLEstado(int[,] tablero)
-        {
-            this._tablero = new int[3, 3];
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    this._tablero[i, j] = tablero[i, j];
             this._nivel = 0;
             this._padre = null;
         }
@@ -408,7 +392,6 @@ namespace OchoPuzzle
                     Respuesta.Add(A);
                     break;
             }
-
             return Respuesta;
         }
         public bool EsFinal()
