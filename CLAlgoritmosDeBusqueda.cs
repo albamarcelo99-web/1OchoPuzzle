@@ -139,13 +139,11 @@ namespace OchoPuzzle
                             encontrado = true; break;
                     }
                 }
-
                 if (!encontrado)
                 {
                     HijosDepurado.Add(hijo);
                 }
             }
-
             return HijosDepurado;
         }
     }
