@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace OchoPuzzle
 {
@@ -16,9 +17,11 @@ namespace OchoPuzzle
         private String pos0;
         private String[,] posiciones;
         private int contadorAnchura = 0;
-        private int contadorProfundidad = 0;
+        private int contadorInterativa = 0;
         private List<CLEstado> Resultado = new List<CLEstado>();
         bool bandera = false;
+        private int ContResolver;
+
         public FRMOchoPuzzle()
         {
             InitializeComponent();
@@ -479,6 +482,12 @@ namespace OchoPuzzle
             else
             { MessageBox.Show("Solucion No Encontrada"); }
         }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
+        }
+
         private void TMRRelojAnchuraPrioritaria_Tick(object sender, EventArgs e)
         {
 
@@ -536,55 +545,49 @@ namespace OchoPuzzle
                                             Convert.ToInt32(LBL22.Text)
                                             );
             Resultado = new List<CLEstado>();
-            
-            int limite = 0;
-            var nud = this.Controls.Find("NUDContador", true).FirstOrDefault() as System.Windows.Forms.NumericUpDown;
-            if (nud != null)
-            {
-                limite = (int)nud.Value;
-                if (limite < 1) limite = 1;
-            }
-            Resultado = CLAlgoritmosDeBusqueda.ProfundidadLimitada(Inicial, limite);
+            Resultado = CLAlgoritmosDeBusqueda.ProfundidadLimitada(Inicial, Convert.ToInt32(NUDLimite.Value));
             if (Resultado.Count > 0)
             {
-                MessageBox.Show("Solucion Encontrada en el nivel " + (Resultado.Count - 1).ToString() + " [ Profundidad Limitada usada: " + limite + "]");
+                MessageBox.Show("Solucion Encontrada en el nivel " + (Resultado.Count - 1).ToString());
                 //Resolver graficamente                
-                TMRRelojProfundidadLimitada.Enabled = true;
+                TMRRelojAnchuraPrioritaria.Enabled = true;
             }
             else
             { MessageBox.Show("Solucion No Encontrada"); }
         }
 
-        private void TMRRelojProfundidadLimitada_Tick_1(object sender, EventArgs e)
+        private void BTNProfundidadIterativa_Click(object sender, EventArgs e)
         {
-            if ((contadorProfundidad < Resultado.Count) && (!bandera))
+            int Limite = Convert.ToInt32(NUDLimite1.Text);
+            CLEstado Inicial = new CLEstado(Convert.ToInt32(LBL00.Text),
+                                           Convert.ToInt32(LBL01.Text),
+                                           Convert.ToInt32(LBL02.Text),
+                                           Convert.ToInt32(LBL10.Text),
+                                           Convert.ToInt32(LBL11.Text),
+                                           Convert.ToInt32(LBL12.Text),
+                                           Convert.ToInt32(LBL20.Text),
+                                           Convert.ToInt32(LBL21.Text),
+                                           Convert.ToInt32(LBL22.Text)
+                                           );
+            List<CLEstado> Resultado = CLAlgoritmosDeBusqueda.ProfundidadIterativa(Inicial, Convert.ToInt32(NUDLimite.Value));
+            MessageBox.Show("El limite llegara a ser " + Limite + " como resultado llegara a ser " + Resultado);
+
+            if ((Resultado.Count - 1 <= Limite) && (Resultado.Count != 0))
             {
-                EstadoATablero(Resultado[Resultado.Count - contadorProfundidad - 1]);
-                contadorProfundidad++;
-            }
-            if ((contadorProfundidad == Resultado.Count) && (!bandera))
-            {
-                bandera = true;
-                contadorProfundidad--;
-                    // pausar antes de invertir
-                TMRRelojProfundidadLimitada.Enabled = false;
-                if (MessageBox.Show("Listo") == DialogResult.OK)
-                {
-                    TMRRelojProfundidadLimitada.Enabled = true;
-                }
+                MessageBox.Show("Solucion Encontrada en el nivel " + (Resultado.Count - 1).ToString());
+                //Resolver graficamente
+                TMRRelojAnchuraPrioritaria.Stop();
+                Resolver = Resultado;
+                ContResolver = 0;
+                TMRRelojAnchuraPrioritaria.Start();
+
+                TMRRelojAnchuraPrioritaria.Enabled = true;
 
             }
-            if ((contadorProfundidad >= 0) && (bandera))
+            else
             {
-                EstadoATablero(Resultado[Resultado.Count - contadorProfundidad - 1]);
-                contadorProfundidad--;
-            }
-            if ((contadorProfundidad == -1) && (bandera))
-            {
-                TMRRelojProfundidadLimitada.Enabled = false;
-                MessageBox.Show("Otra vez desordenado");
+                MessageBox.Show("Solucion no encontrada y fuera del Limite");
             }
         }
     }
 }
-    

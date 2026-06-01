@@ -433,5 +433,110 @@ namespace OchoPuzzle
         }
 
         #endregion
+
+        public int H1()
+        {
+            int contador1 = 0;
+
+            int[,] meta =
+            {
+                {1,2,3},
+                {8,0,4},
+                {7,6,5}
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (this._tablero[i, j] != 0 &&
+                        this._tablero[i, j] != meta[i, j])
+                    {
+                        contador1++;
+                    }
+                }
+            }
+
+            return contador1;
+        }
+
+        public int H2()
+        {
+            int contador2 = 0;
+
+            int[,] meta =
+            {
+                {1,2,3},
+                {8,0,4},
+                {7,6,5}
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    int valor = _tablero[i, j];
+
+                    if (valor == 0)
+                        continue;
+
+                    int filaMeta = 0;
+                    int columnaMeta = 0;
+
+                    for (int x = 0; x < 3; x++)
+                    {
+                        for (int y = 0; y < 3; y++)
+                        {
+                            if (meta[x, y] == valor)
+                            {
+                                filaMeta = x;
+                                columnaMeta = y;
+                            }
+                        }
+                    }
+
+                    contador2 += Math.Abs(i - filaMeta) +
+                         Math.Abs(j - columnaMeta);
+                }
+            }
+
+            return contador2;
+        }
+
+        public int H3()
+        {
+            int contador3 = 0;
+
+            int[] recorrido =
+            {
+                _tablero[0,0],
+                _tablero[0,1],
+                _tablero[0,2],
+                _tablero[1,2],
+                _tablero[2,2],
+                _tablero[2,1],
+                _tablero[2,0],
+                _tablero[1,0]
+            };
+
+            for (int i = 0; i < 8; i++)
+            {
+                int actual = recorrido[i];
+                int siguiente = recorrido[(i + 1) % 8];
+
+                if (actual != 0)
+                {
+                    int sucesor = (actual == 8) ? 1 : actual + 1;
+
+                    if (siguiente != sucesor)
+                        contador3 += 2;
+                }
+            }
+
+            if (_tablero[1, 1] != 0)
+                contador3 += 1;
+
+            return H2() + (3 * contador3);
+        }
     }
 }

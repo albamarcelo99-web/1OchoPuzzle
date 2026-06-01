@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace OchoPuzzle
 {
@@ -76,6 +77,66 @@ namespace OchoPuzzle
             }
             return Solucion;
         }
+
+        public static List<CLEstado> ProfundidadIterativa(CLEstado Inicial, int Limite)
+        {
+            //Definición de variables
+            List<CLEstado> Solucion = new List<CLEstado>();
+            List<CLEstado> Abiertos = new List<CLEstado>();
+            List<CLEstado> Cerrados = new List<CLEstado>();
+            List<CLEstado> Hijos = new List<CLEstado>();
+            
+            //Algoritmo
+            int Profundidad = 1;
+            CLEstado Actual = Inicial;
+
+            while (!Actual.EsFinal() && Profundidad < Limite)
+            {
+                Abiertos.Add(Inicial);
+                Actual = Abiertos[Abiertos.Count - 1];
+
+                while (!Actual.EsFinal() && Abiertos.Count > 0)
+                {
+                    Abiertos.RemoveAt(Abiertos.Count - 1);
+                    Cerrados.Add(Actual);
+
+                    if (Actual.nivel <= Profundidad)
+                    {
+                        Hijos = Actual.GenerarHijos();
+                        Hijos = TratarRepetidosProfundidadIterativa(Hijos, Abiertos, Cerrados);
+                       
+                        foreach (CLEstado hijo in Hijos)
+                        {
+                            Abiertos.Add(hijo);
+                        }
+                    }
+
+                    if (Abiertos.Count > 0)
+                    {
+                        Actual = Abiertos[Abiertos.Count - 1];
+                    }
+                    else
+                    {
+                        Actual = Inicial; // Reiniciar para la siguiente iteración
+                    }
+                }
+                MessageBox.Show("Profundidad : " + Profundidad);
+                Profundidad++;
+                Abiertos = new List<CLEstado>();
+                Cerrados = new List<CLEstado>();
+            }
+            if (Actual.EsFinal())
+            {
+                Solucion.Add(Actual);
+                while (Actual.padre != null)
+                {
+                    Solucion.Add(Actual.padre);
+                    Actual = Actual.padre;
+                }
+            }
+            return Solucion;
+        }
+
         private static List<CLEstado> TratarRepetidos(List<CLEstado> hijos, List<CLEstado> abiertos, List<CLEstado> cerrados)
         {
             List<CLEstado> HijosDepurado = new List<CLEstado>();
@@ -139,11 +200,50 @@ namespace OchoPuzzle
                             encontrado = true; break;
                     }
                 }
+
                 if (!encontrado)
                 {
                     HijosDepurado.Add(hijo);
                 }
             }
+
+            return HijosDepurado;
+        }
+
+        private static List<CLEstado> TratarRepetidosProfundidadIterativa(List<CLEstado> hijos, List<CLEstado> abiertos, List<CLEstado> cerrados)
+        {
+            List<CLEstado> HijosDepurado = new List<CLEstado>();
+            bool encontrado = false;
+            foreach (CLEstado hijo in hijos)
+            {
+                encontrado = false;
+                // comparar con abiertos
+                foreach (var a in abiertos)
+                {
+                    if (hijo.EsIgual(a))
+                    {
+                        encontrado = true; break;
+                    }
+                }
+
+                if (encontrado) continue;
+
+                // comparar con cerrados
+                foreach (var c in cerrados)
+                {
+                    if (hijo.EsIgual(c))
+                    {
+                        if (hijo.nivel >= c.nivel)
+                            encontrado = true; break;
+                    }
+                }
+
+                if (!encontrado)
+                {
+                    HijosDepurado.Add(hijo);
+                }
+            }
+
             return HijosDepurado;
         }
     }
