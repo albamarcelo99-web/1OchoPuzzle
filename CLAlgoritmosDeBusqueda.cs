@@ -254,6 +254,7 @@ namespace OchoPuzzle
                 foreach (CLEstado a in Hijos)
                     Abiertos.Add(a);
                 //ORDENAR ABIERTOS POR H3
+                Abiertos = Abiertos.OrderBy(e => e.h3).ToList();
                 Actual = Abiertos[0];
             }
             if (Actual.EsFinal())

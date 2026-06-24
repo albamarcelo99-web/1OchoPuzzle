@@ -492,7 +492,7 @@ namespace OchoPuzzle
                                             Convert.ToInt32(LBL22.Text)
                                             );
             Resultado = new List<CLEstado>();
-            Resultado = CLAlgoritmosDeBusqueda.AlgoritmoHeuristico(Inicial);
+            Resultado = CLAlgoritmosDeBusqueda.AlgortimoHeuristicoH3(Inicial);
             if (Resultado.Count > 0)
             {
                 MessageBox.Show("Solucion Encontrada en el nivel " + (Resultado.Count - 1).ToString());

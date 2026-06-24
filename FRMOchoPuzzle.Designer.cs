@@ -246,7 +246,7 @@
             // 
             // TMRRelojAnchuraPrioritaria
             // 
-            this.TMRRelojAnchuraPrioritaria.Interval = 500;
+            this.TMRRelojAnchuraPrioritaria.Interval = 2000;
             this.TMRRelojAnchuraPrioritaria.Tick += new System.EventHandler(this.TMRRelojAnchuraPrioritaria_Tick);
             // 
             // NUDLimite
