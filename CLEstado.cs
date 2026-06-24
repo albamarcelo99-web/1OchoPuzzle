@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace OchoPuzzle
 {
@@ -10,6 +14,7 @@ namespace OchoPuzzle
         private int[,] _tablero;
         private int _nivel;
         private CLEstado _padre;
+        private int _h3;
         #endregion
 
         #region Propiedades
@@ -22,6 +27,11 @@ namespace OchoPuzzle
         {
             get => _nivel;
             set => _nivel = value;
+        }
+        public int h3
+        {
+            get => _h3;
+            set => _h3 = value;
         }
         public CLEstado padre
         {
@@ -39,6 +49,7 @@ namespace OchoPuzzle
                     this._tablero[i, j] = 0;
             this._nivel = 0;
             this._padre = null;
+            this._h3 = H3();
         }
         public CLEstado(int p00, int p01, int p02,
                         int p10, int p11, int p12,
@@ -57,6 +68,7 @@ namespace OchoPuzzle
             this._tablero[2, 2] = p22;
             this._nivel = 0;
             this._padre = null;
+            this._h3 = H3();
         }
 
 
@@ -402,15 +414,19 @@ namespace OchoPuzzle
         public bool EsFinal()
         {
             bool res = false;
+            // Estado objetivo: 
+            // 1 2 3
+            // 8 0 4
+            // 7 6 5
             if (_tablero[0, 0] == 1 &&
                 _tablero[0, 1] == 2 &&
                 _tablero[0, 2] == 3 &&
-                _tablero[1, 0] == 4 &&
-                _tablero[1, 1] == 5 &&
-                _tablero[1, 2] == 6 &&
+                _tablero[1, 0] == 8 &&
+                _tablero[1, 1] == 0 &&
+                _tablero[1, 2] == 4 &&
                 _tablero[2, 0] == 7 &&
-                _tablero[2, 1] == 8 &&
-                _tablero[2, 2] == 0)
+                _tablero[2, 1] == 6 &&
+                _tablero[2, 2] == 5)
             {
                 res = true;
             }
@@ -432,111 +448,102 @@ namespace OchoPuzzle
             return true;
         }
 
-        #endregion
-
         public int H1()
         {
-            int contador1 = 0;
+            int piezasFueraDeLugar = 0;
 
-            int[,] meta =
+            int[,] estadoMeta =
             {
-                {1,2,3},
-                {8,0,4},
-                {7,6,5}
+            {1, 2, 3},
+            {8, 0, 4},
+            {7, 6, 5}
             };
 
-            for (int i = 0; i < 3; i++)
+            for (int fila = 0; fila < 3; fila++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int columna = 0; columna < 3; columna++)
                 {
-                    if (this._tablero[i, j] != 0 &&
-                        this._tablero[i, j] != meta[i, j])
+                    if (_tablero[fila, columna] != 0 &&
+                        _tablero[fila, columna] != estadoMeta[fila, columna])
                     {
-                        contador1++;
+                        piezasFueraDeLugar++;
                     }
                 }
             }
-
-            return contador1;
+            return piezasFueraDeLugar;
         }
 
         public int H2()
         {
-            int contador2 = 0;
-
-            int[,] meta =
+            int distanciaTotal = 0;
+            int[,] estadoMeta =
             {
-                {1,2,3},
-                {8,0,4},
-                {7,6,5}
-            };
 
-            for (int i = 0; i < 3; i++)
+        {1, 2, 3},
+        {8, 0, 4},
+        {7, 6, 5}
+    };
+            for (int fila = 0; fila < 3; fila++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int columna = 0; columna < 3; columna++)
                 {
-                    int valor = _tablero[i, j];
-
+                    int valor = _tablero[fila, columna];
                     if (valor == 0)
                         continue;
-
                     int filaMeta = 0;
                     int columnaMeta = 0;
-
-                    for (int x = 0; x < 3; x++)
+                    for (int i = 0; i < 3; i++)
                     {
-                        for (int y = 0; y < 3; y++)
+                        for (int j = 0; j < 3; j++)
                         {
-                            if (meta[x, y] == valor)
+                            if (estadoMeta[i, j] == valor)
                             {
-                                filaMeta = x;
-                                columnaMeta = y;
+                                filaMeta = i;
+                                columnaMeta = j;
                             }
                         }
                     }
-
-                    contador2 += Math.Abs(i - filaMeta) +
-                         Math.Abs(j - columnaMeta);
+                    distanciaTotal +=
+                        Math.Abs(fila - filaMeta) +
+                        Math.Abs(columna - columnaMeta);
                 }
             }
-
-            return contador2;
+            return distanciaTotal;
         }
 
-        public int H3()
+        private int H3()
         {
-            int contador3 = 0;
 
-            int[] recorrido =
+            int sumaS = 0;
+            int[] borde =
             {
-                _tablero[0,0],
-                _tablero[0,1],
-                _tablero[0,2],
-                _tablero[1,2],
-                _tablero[2,2],
-                _tablero[2,1],
-                _tablero[2,0],
-                _tablero[1,0]
-            };
-
+        _tablero[0,0],
+        _tablero[0,1],
+        _tablero[0,2],
+        _tablero[1,2],
+        _tablero[2,2],
+        _tablero[2,1],
+        _tablero[2,0],
+        _tablero[1,0]
+    };
             for (int i = 0; i < 8; i++)
             {
-                int actual = recorrido[i];
-                int siguiente = recorrido[(i + 1) % 8];
+                int actual = borde[i];
+                if (actual == 0)
+                    continue;
+                int siguiente = borde[(i + 1) % 8];
+                int sucesorCorrecto = (actual == 8) ? 1 : actual + 1;
 
-                if (actual != 0)
-                {
-                    int sucesor = (actual == 8) ? 1 : actual + 1;
-
-                    if (siguiente != sucesor)
-                        contador3 += 2;
-                }
+                if (siguiente == sucesorCorrecto)
+                    sumaS += 0;
+                else
+                    sumaS += 2;
             }
-
             if (_tablero[1, 1] != 0)
-                contador3 += 1;
-
-            return H2() + (3 * contador3);
+                sumaS += 1;
+            return H2() + sumaS;
         }
+
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OchoPuzzle;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 
 namespace OchoPuzzle
 {
@@ -17,11 +17,8 @@ namespace OchoPuzzle
         private String pos0;
         private String[,] posiciones;
         private int contadorAnchura = 0;
-        private int contadorInterativa = 0;
         private List<CLEstado> Resultado = new List<CLEstado>();
         bool bandera = false;
-        private int ContResolver;
-
         public FRMOchoPuzzle()
         {
             InitializeComponent();
@@ -482,6 +479,29 @@ namespace OchoPuzzle
             else
             { MessageBox.Show("Solucion No Encontrada"); }
         }
+        private void BusquedaHeuristica_Click(object sender, EventArgs e)
+        {
+            CLEstado Inicial = new CLEstado(Convert.ToInt32(LBL00.Text),
+                                            Convert.ToInt32(LBL01.Text),
+                                            Convert.ToInt32(LBL02.Text),
+                                            Convert.ToInt32(LBL10.Text),
+                                            Convert.ToInt32(LBL11.Text),
+                                            Convert.ToInt32(LBL12.Text),
+                                            Convert.ToInt32(LBL20.Text),
+                                            Convert.ToInt32(LBL21.Text),
+                                            Convert.ToInt32(LBL22.Text)
+                                            );
+            Resultado = new List<CLEstado>();
+            Resultado = CLAlgoritmosDeBusqueda.AlgoritmoHeuristico(Inicial);
+            if (Resultado.Count > 0)
+            {
+                MessageBox.Show("Solucion Encontrada en el nivel " + (Resultado.Count - 1).ToString());
+                //Resolver graficamente
+                TMRRelojAnchuraPrioritaria.Enabled = true;
+            }
+            else
+            { MessageBox.Show("Solucion No Encontrada"); }
+        }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -556,38 +576,50 @@ namespace OchoPuzzle
             { MessageBox.Show("Solucion No Encontrada"); }
         }
 
-        private void BTNProfundidadIterativa_Click(object sender, EventArgs e)
+        private void BTNH1_Click(object sender, EventArgs e)
         {
-            int Limite = Convert.ToInt32(NUDLimite1.Text);
             CLEstado Inicial = new CLEstado(Convert.ToInt32(LBL00.Text),
-                                           Convert.ToInt32(LBL01.Text),
-                                           Convert.ToInt32(LBL02.Text),
-                                           Convert.ToInt32(LBL10.Text),
-                                           Convert.ToInt32(LBL11.Text),
-                                           Convert.ToInt32(LBL12.Text),
-                                           Convert.ToInt32(LBL20.Text),
-                                           Convert.ToInt32(LBL21.Text),
-                                           Convert.ToInt32(LBL22.Text)
-                                           );
-            List<CLEstado> Resultado = CLAlgoritmosDeBusqueda.ProfundidadIterativa(Inicial, Convert.ToInt32(NUDLimite.Value));
-            MessageBox.Show("El limite llegara a ser " + Limite + " como resultado llegara a ser " + Resultado);
-
-            if ((Resultado.Count - 1 <= Limite) && (Resultado.Count != 0))
-            {
-                MessageBox.Show("Solucion Encontrada en el nivel " + (Resultado.Count - 1).ToString());
-                //Resolver graficamente
-                TMRRelojAnchuraPrioritaria.Stop();
-                Resolver = Resultado;
-                ContResolver = 0;
-                TMRRelojAnchuraPrioritaria.Start();
-
-                TMRRelojAnchuraPrioritaria.Enabled = true;
-
-            }
-            else
-            {
-                MessageBox.Show("Solucion no encontrada y fuera del Limite");
-            }
+                                            Convert.ToInt32(LBL01.Text),
+                                            Convert.ToInt32(LBL02.Text),
+                                            Convert.ToInt32(LBL10.Text),
+                                            Convert.ToInt32(LBL11.Text),
+                                            Convert.ToInt32(LBL12.Text),
+                                            Convert.ToInt32(LBL20.Text),
+                                            Convert.ToInt32(LBL21.Text),
+                                            Convert.ToInt32(LBL22.Text)
+                                            );
+            MessageBox.Show(Inicial.H1().ToString());
         }
+
+        private void BTNH2_Click(object sender, EventArgs e)
+        {
+            CLEstado Inicial = new CLEstado(Convert.ToInt32(LBL00.Text),
+                                            Convert.ToInt32(LBL01.Text),
+                                            Convert.ToInt32(LBL02.Text),
+                                            Convert.ToInt32(LBL10.Text),
+                                            Convert.ToInt32(LBL11.Text),
+                                            Convert.ToInt32(LBL12.Text),
+                                            Convert.ToInt32(LBL20.Text),
+                                            Convert.ToInt32(LBL21.Text),
+                                            Convert.ToInt32(LBL22.Text)
+                                            );
+            MessageBox.Show(Inicial.H2().ToString());
+        }
+
+        private void BTNH3_Click(object sender, EventArgs e)
+        {
+            CLEstado Inicial = new CLEstado(Convert.ToInt32(LBL00.Text),
+                                            Convert.ToInt32(LBL01.Text),
+                                            Convert.ToInt32(LBL02.Text),
+                                            Convert.ToInt32(LBL10.Text),
+                                            Convert.ToInt32(LBL11.Text),
+                                            Convert.ToInt32(LBL12.Text),
+                                            Convert.ToInt32(LBL20.Text),
+                                            Convert.ToInt32(LBL21.Text),
+                                            Convert.ToInt32(LBL22.Text)
+                                            );
+            MessageBox.Show(Inicial.h3.ToString());
+        }
+
     }
 }
